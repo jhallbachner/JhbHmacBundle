@@ -12,7 +12,7 @@
            <argument>%jhb_hmac.encoder.datefield%</argument>
            <argument>%jhb_hmac.encoder.keyfield%</argument>
            <argument>%jhb_hmac.encoder.signaturefield%</argument>
-           <argument>%jhb_hmac.encoder.requireheader%</argument>
+           <argument>%jhb_hmac.encoder.allowedlocations%</argument>
         </service>
 
         <service id="jhb_hmac.security.authentication.provider"

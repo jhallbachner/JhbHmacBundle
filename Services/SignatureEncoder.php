@@ -10,9 +10,9 @@ class SignatureEncoder
     protected $dateField;
     protected $keyField;
     protected $signatureField;
-    protected $requireHeader;
+    protected $allowedLocations;
 
-    public function __construct($hashMethod, $requireDate, $timeframe, $dateField, $keyField, $signatureField, $requireHeader)
+    public function __construct($hashMethod, $requireDate, $timeframe, $dateField, $keyField, $signatureField, $allowedLocations)
     {
         $this->hashMethod = $hashMethod;
         $this->requireDate = $requireDate;
@@ -20,7 +20,7 @@ class SignatureEncoder
         $this->dateField = $dateField;
         $this->keyField = $keyField;
         $this->signatureField = $signatureField;
-        $this->requireHeader = $requireHeader;
+        $this->allowedLocations = $allowedLocations;
     }
 
     public function encode($method, $resource, $request, $secretKey)
@@ -46,18 +46,17 @@ class SignatureEncoder
 
     public function prepareRequestData($request, $restrictions = true)
     {
-        $header = ($restrictions && $this->requireHeader);
         $datecheck = ($restrictions && $this->requireDate);
 
         $data = array();
 
-        if($request->headers->has($this->signatureField) && $request->headers->has($this->keyField)) {
+        if(in_array('header', $this->allowedLocations) && $request->headers->has($this->signatureField) && $request->headers->has($this->keyField)) {
             $signature = urldecode($request->headers->get($this->signatureField));
             $key = $request->headers->get($this->keyField);
-        } elseif(!$header && $request->getMethod() == 'GET' && $request->query->has($this->signatureField) && $request->query->has($this->keyField)) {
+        } elseif(in_array('request', $this->allowedLocations) && $request->getMethod() == 'GET' && $request->query->has($this->signatureField) && $request->query->has($this->keyField)) {
             $signature = $request->query->get($this->signatureField);
             $key = $request->query->get($this->keyField);
-        } elseif(!$header && $request->request->has($this->signatureField) && $request->request->has($this->keyField)) {
+        } elseif(in_array('request', $this->allowedLocations) && $request->request->has($this->signatureField) && $request->request->has($this->keyField)) {
             $signature = $request->request->get($this->signatureField);
             $key = $request->request->get($this->keyField);
         } else {

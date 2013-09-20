@@ -21,6 +21,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('jhb_hmac');
 
         $rootNode
+            ->fixXmlConfig('allowedSignatureLocation')
             ->children()
                 ->scalarNode('hashMethod')->defaultValue('sha1')->end()
                 ->booleanNode('requireDate')->defaultTrue()->end()
@@ -28,7 +29,16 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('dateField')->defaultValue('date')->end()
                 ->scalarNode('keyField')->defaultValue('key')->end()
                 ->scalarNode('signatureField')->defaultValue('signature')->end()
-                ->booleanNode('requireHeaderCredentials')->defaultTrue()->end()
+                ->arrayNode('allowedSignatureLocations')
+                    ->requiresAtLeastOneElement()
+                    ->defaultValue(array('header'))
+                    ->prototype('scalar')
+                        ->validate()
+                            ->ifNotInArray(array('header', 'request', 'rest'))
+                            ->thenInvalid('Allowable locations are "header," "request," and "rest"')
+                        ->end()
+                    ->end()
+                ->end()
                 ->arrayNode('users')
                     ->useAttributeAsKey('username')
                     ->fixXmlConfig('user')

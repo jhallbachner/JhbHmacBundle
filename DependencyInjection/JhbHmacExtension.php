@@ -30,7 +30,7 @@ class JhbHmacExtension extends Extension
         $container->setParameter('jhb_hmac.encoder.datefield', $config['dateField']);
         $container->setParameter('jhb_hmac.encoder.keyfield', $config['keyField']);
         $container->setParameter('jhb_hmac.encoder.signaturefield', $config['signatureField']);
-        $container->setParameter('jhb_hmac.encoder.requireheader', $config['requireHeaderCredentials']);
+        $container->setParameter('jhb_hmac.encoder.allowedlocations', $config['allowedSignatureLocations']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
