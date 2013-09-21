@@ -26,6 +26,10 @@ class ApiSecurityProvider implements AuthenticationProviderInterface
 
     public function authenticate(TokenInterface $token)
     {
+        if(!isset($token->publicKey) || !isset($token->signature)) {
+            return $token;
+        }
+
         $user = $this->userProvider->loadUserByPublicKey($token->publicKey);
 
         if($user && $this->checkRequestSignature($token->method, $token->path, $token->request, $user->getSecretKey(), $token->signature)) {

@@ -43,13 +43,13 @@ class ApiSecurityListener implements ListenerInterface
 
         $data = $this->encoder->prepareRequestData($request, true);
 
-        if(!$data) {
-            throw new AccessDeniedHttpException('The key-based API authentication failed due to a malformed request.');
-        }
-
         $token = new ApiRequestToken();
         foreach(array('method', 'path', 'request', 'signature', 'publicKey') as $field) {
-            $token->$field = $data[$field];
+            $token->$field = isset($data[$field]) ? $data[$field] : null;
+        }
+
+        if(is_null($token->signature) && is_null($token->publicKey)) {
+            return;
         }
 
         try {
