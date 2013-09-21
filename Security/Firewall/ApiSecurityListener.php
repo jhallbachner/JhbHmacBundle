@@ -49,7 +49,7 @@ class ApiSecurityListener implements ListenerInterface
         }
 
         if(is_null($token->signature) && is_null($token->publicKey)) {
-            return;
+            return $this->securityContext->setToken($token);
         }
 
         try {
