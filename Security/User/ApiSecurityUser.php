@@ -2,10 +2,11 @@
 
 namespace Jhb\HmacBundle\Security\User;
 
+use Jhb\HmacBundle\Interfaces\HmacUserInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ApiSecurityUser implements UserInterface
+class ApiSecurityUser implements UserInterface, HmacUserInterface
 {
     protected $username;
     protected $secretKey;

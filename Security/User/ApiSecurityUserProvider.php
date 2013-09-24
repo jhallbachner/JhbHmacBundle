@@ -2,12 +2,13 @@
 
 namespace Jhb\HmacBundle\Security\User;
 
+use Jhb\HmacBundle\Interfaces\HmacUserProviderInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-class ApiSecurityUserProvider implements UserProviderInterface
+class ApiSecurityUserProvider implements UserProviderInterface, HmacUserProviderInterface
 {
     protected $users;
     protected $usersByKey = array();

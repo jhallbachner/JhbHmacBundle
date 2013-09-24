@@ -2,6 +2,9 @@
 
 namespace Jhb\HmacBundle\Security\Authentication\Provider;
 
+use Jhb\HmacBundle\Exception\InvalidProviderException;
+use Jhb\HmacBundle\Interfaces\HmacUserInterface;
+use Jhb\HmacBundle\Interfaces\HmacUserProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -22,6 +25,10 @@ class ApiSecurityProvider implements AuthenticationProviderInterface
     {
         $this->userProvider = $userProvider;
         $this->encoder = $encoder;
+
+        if(!($userProvider instanceof HmacUserProviderInterface)) {
+            throw new InvalidProviderException('User provider must implement HmacUserProviderInterface.');
+        }
     }
 
     public function authenticate(TokenInterface $token)
