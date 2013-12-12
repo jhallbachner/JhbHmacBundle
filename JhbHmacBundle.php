@@ -15,4 +15,9 @@ class JhbHmacBundle extends Bundle
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new HmacFactory());
     }
+
+    public function registerCommands(Application $application)
+    {
+
+    }
 }

@@ -34,5 +34,9 @@ class JhbHmacExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+
+        if($config['extenders']['fos_user']) {
+            $loader->load('fos_user.xml');
+        }
     }
 }

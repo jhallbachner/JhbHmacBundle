@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->fixXmlConfig('allowedSignatureLocation')
+            ->fixXmlConfig('extender')
             ->children()
                 ->scalarNode('hashMethod')->defaultValue('sha1')->end()
                 ->booleanNode('requireDate')->defaultTrue()->end()
@@ -29,6 +30,13 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('dateField')->defaultValue('date')->end()
                 ->scalarNode('keyField')->defaultValue('key')->end()
                 ->scalarNode('signatureField')->defaultValue('signature')->end()
+                ->arrayNode('extenders')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('fos_rest')->defaultFalse()->end()
+                        ->booleanNode('fos_user')->defaultFalse()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('allowedSignatureLocations')
                     ->requiresAtLeastOneElement()
                     ->defaultValue(array('header'))

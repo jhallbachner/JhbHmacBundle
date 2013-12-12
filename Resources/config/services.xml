@@ -2,10 +2,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="jhb_hmac.encoder.class">Jhb\HmacBundle\Services\SignatureEncoder</parameter>
+        <parameter key="jhb_hmac.security.authentication.provider.class">Jhb\HmacBundle\Security\Authentication\Provider\ApiSecurityProvider</parameter>
+        <parameter key="jhb_hmac.security.authentication.listener.class">Jhb\HmacBundle\Security\Firewall\ApiSecurityListener</parameter>
+        <parameter key="jhb_hmac.user_provider.class">Jhb\HmacBundle\Security\User\ApiSecurityUserProvider</parameter>
+        <parameter key="jhb_hmac.user_provider.user.class">Jhb\HmacBundle\Security\User\ApiSecurityUser</parameter>
+    </parameters>
+
    <services>
 
         <service id="jhb_hmac.encoder"
-           class="Jhb\HmacBundle\Services\SignatureEncoder" public="true">
+           class="%jhb_hmac.encoder.class%" public="true">
            <argument>%jhb_hmac.encoder.hashmethod%</argument>
            <argument>%jhb_hmac.encoder.requiredate%</argument>
            <argument>%jhb_hmac.encoder.datewindow%</argument>
@@ -16,13 +24,13 @@
         </service>
 
         <service id="jhb_hmac.security.authentication.provider"
-            class="Jhb\HmacBundle\Security\Authentication\Provider\ApiSecurityProvider" public="false">
+            class="%jhb_hmac.security.authentication.provider.class%" public="false">
             <argument /> <!-- User Provider -->
             <argument type="service" id="jhb_hmac.encoder" />
         </service>
 
         <service id="jhb_hmac.security.authentication.listener"
-            class="Jhb\HmacBundle\Security\Firewall\ApiSecurityListener" public="false">
+            class="%jhb_hmac.security.authentication.listener.class%" public="false">
             <argument type="service" id="security.context"/>
             <argument type="service" id="security.authentication.manager" />
             <argument type="service" id="jhb_hmac.encoder" />
@@ -30,12 +38,12 @@
         </service>
 
         <service id="jhb_hmac.user_provider"
-            class="Jhb\HmacBundle\Security\User\ApiSecurityUserProvider">
+            class="%jhb_hmac.user_provider.class%">
             <argument>%jhb_hmac.user_provider.users%</argument>
         </service>
 
         <service id="jhb_hmac.user_provider.user"
-            class="Jhb\HmacBundle\Security\User\ApiSecurityUser"
+            class="%jhb_hmac.user_provider.user.class%"
             abstract="true"
             public="false">
         </service>
